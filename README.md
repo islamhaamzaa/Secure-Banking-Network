@@ -1,403 +1,238 @@
 # 🏦 Secure Banking Network Infrastructure
 
-[![Cisco](https://img.shields.io/badge/Cisco-IOS-blue?logo=cisco)](https://www.cisco.com/)
-[![Fortinet](https://img.shields.io/badge/Fortinet-FortiGate-red?logo=fortinet)](https://www.fortinet.com/)
-[![Python](https://img.shields.io/badge/Python-Automation-yellow?logo=python)](https://www.python.org/)
-![OSPF](https://img.shields.io/badge/Routing-OSPF-green)
-![BGP](https://img.shields.io/badge/Routing-BGP-orange)
-![SD-WAN](https://img.shields.io/badge/SD--WAN-Enabled-success)
-![IPsec](https://img.shields.io/badge/IPsec-VPN-blue)
-![License](https://img.shields.io/badge/License-MIT-green)
+[![Cisco](https://img.shields.io/badge/Cisco-IOS-1BA0D7?logo=cisco&logoColor=white)](https://www.cisco.com/)
+[![Fortinet](https://img.shields.io/badge/Fortinet-FortiGate_NGFW-EE3124?logo=fortinet&logoColor=white)](https://www.fortinet.com/)
+[![Python](https://img.shields.io/badge/Python-Automation-3776AB?logo=python&logoColor=white)](https://www.python.org/)
+[![OSPF](https://img.shields.io/badge/Routing-OSPF-2E7D32)](#-routing--wan-architecture)
+[![BGP](https://img.shields.io/badge/Routing-MP--BGP_VPNv4-F57C00)](#-routing--wan-architecture)
+[![SD-WAN](https://img.shields.io/badge/SD--WAN-Dual_ISP_Failover-2E7D32)](#-sd-wan--wan-resilience)
+[![IPsec](https://img.shields.io/badge/IPsec-IKEv2_VPN-1565C0)](#-security-architecture)
+[![PCI-DSS](https://img.shields.io/badge/Compliance-PCI--DSS_v4.0-6A1B9A)](#-compliance--standards)
+[![ISO 27001](https://img.shields.io/badge/Compliance-ISO_27001%3A2022-6A1B9A)](#-compliance--standards)
+[![License](https://img.shields.io/badge/License-MIT-2E7D32)](LICENSE)
+
+A graduation-project simulation of an enterprise, multi-site banking network — built on **PNETLab** and designed around real ISP/MPLS, dual-firewall, and dynamic-routing practices used in production financial networks.
 
 ---
 
-# 📖 Project Overview
+## 📖 Project Overview
 
-This project simulates a complete Enterprise Banking Network Infrastructure designed using Cisco Enterprise Networking and FortiGate Next Generation Firewalls.
+This project designs and simulates a complete **enterprise banking WAN**, connecting a **Cairo Headquarters (HQ)**, a **Data Center (DC)**, and an **Aswan Branch** over a resilient, security-hardened infrastructure.
 
-The infrastructure connects multiple banking sites through a secure and highly available WAN architecture while providing network segmentation, redundancy, disaster recovery, automation, and enterprise-grade security.
+The design combines:
 
----
+- Dual-carrier **MPLS L3VPN transport** (WE and Vodafone) for WAN connectivity between sites
+- **FortiGate NGFW** at every site for perimeter security, VPN termination, and traffic inspection
+- **SD-WAN with automatic ISP failover** for high availability
+- **Site-to-site IPsec IKEv2 VPN** as a backup/overlay path
+- **OSPF with BFD** for fast intra-site and core convergence, and **MP-BGP (VPNv4)** for MPLS-provider routing
+- **VLAN micro-segmentation** and a **DMZ** to isolate banking departments (HR, IT, Sales) and public-facing services
+- Centralized visibility via **FortiAnalyzer** and endpoint compliance via **FortiClient EMS**
+- Python-based **network automation** for configuration backup and alerting
 
-# 🌍 Network Architecture
+The architecture was designed with **PCI-DSS v4.0** and **ISO 27001:2022** control objectives in mind — segmentation of cardholder-adjacent zones, restricted administrative access, and centralized logging.
 
-The project includes:
-
-- 🏢 Headquarters (HQ)
-- 🏢 Data Center (DC)
-- 🏢 Disaster Recovery Site (DR)
-- 🏢 Branch Office (Aswan)
-- 🌐 MPLS WAN
-- 🌐 Dual ISP Connectivity
-- 🔒 IPsec VPN
-- 🚀 SD-WAN
-- 🛡 FortiGate NGFW
-- ⚙ Cisco Enterprise Routing & Switching
+> 🎓 Graduation Project — Giza High Institute for Engineering and Technology, Communications & Electronics Engineering, 2025/2026 (Supervisor: Dr. Atef Salama)
 
 ---
 
-# 🖼 Network Topology
-
-> Add your topology image here
+## 🖼 Network Topology
 
 ![Network Topology](Images/Topology/Network_Topology.png)
 
----
-
-# ⚙ Technologies Used
-
-## Cisco
-
-- Cisco IOS
-- Layer 2 Switching
-- Layer 3 Switching
-- Core Switching
-- Enterprise Routing
-
-## Routing
-
-- OSPF
-- BGP
-- Static Routing
-- MPLS
-
-## Security
-
-- FortiGate NGFW
-- Firewall Policies
-- NAT
-- Access Control
-- Security Zones
-- DMZ
-
-## WAN
-
-- SD-WAN
-- IPsec VPN
-- Dual ISP
-- WAN Failover
-
-## Network Services
-
-- DHCP
-- DNS
-- VLAN
-- Inter-VLAN Routing
-
-## Monitoring
-
-- Traffic Logging
-- FortiGate Logs
-- Connectivity Validation
-
-## Automation
-
-- Python
-- Paramiko
-- SSH
-- Linux
-- Cron
-- Email Notification
+The topology connects three sites — **Cairo HQ**, **Data Center**, and **Aswan Branch** — through dual-provider MPLS backbones (WE and Vodafone), with FortiGate firewalls at the WAN edge of each site handling SD-WAN steering and IPsec VPN termination.
 
 ---
 
-# 🏢 Headquarters (HQ)
+## 🌍 Site Architecture
 
-The Headquarters contains:
-
-- Cisco Core Switch
-- Cisco Access Switches
-- FortiGate Firewall
-- OSPF Routing
-- SD-WAN
-- IPsec VPN
-- VLAN Segmentation
-- DMZ
-- Automation Server
+| Site | Role | Key Components |
+|---|---|---|
+| **Cairo HQ** | Headquarters | Core/Access switching, FortiGate NGFW, SD-WAN hub, DMZ, VLAN segmentation, automation server |
+| **Data Center** | Critical services & DR | Core switching, FortiGate NGFW, dedicated routing/firewall policies to HQ |
+| **Aswan Branch** | Remote branch | Dual-ISP SD-WAN, FortiGate NGFW, IPsec VPN back to HQ, OSPF |
+| **MPLS Core** | Transport | Dual-carrier PE/P/RR routers (WE & Vodafone) providing L3VPN transport between sites |
 
 ---
 
-## HQ Interfaces
+## ⚙ Technologies Used
 
-![Interfaces](Images/HQ/Interfaces.png)
+**Cisco:** IOS · Layer 2/3 Switching · Core Switching · Enterprise Routing
 
----
+**Routing:** OSPF (with BFD) · MP-BGP (VPNv4) · Static Routing · MPLS L3VPN
 
-## OSPF
+**Security:** FortiGate NGFW · Firewall Policies · NAT · DMZ · Access Control · Security Zones · FortiAnalyzer · FortiClient EMS
 
-![OSPF](Images/HQ/OSPF_Configuration.png)
+**WAN:** SD-WAN · IPsec IKEv2 VPN · Dual ISP (WE / Vodafone) · Automatic Failover
 
----
+**Network Services:** DHCP · DNS · VLAN · Inter-VLAN Routing
 
-## SD-WAN
+**Monitoring:** Traffic Logging · FortiGate Logs · Connectivity Validation
 
-![SD-WAN](Images/HQ/SDWAN_Status.png)
-
----
-
-## IPsec VPN
-
-![VPN](Images/HQ/IPsec_Tunnels.png)
+**Automation:** Python · Paramiko · SSH · Cron · Email Notification
 
 ---
 
-## Firewall Policies
+## 🚦 Routing & WAN Architecture
 
-![Policies](Images/HQ/Firewall_Policies.png)
+- **OSPF with BFD** runs within each site and across the MPLS-facing edge for fast (sub-second) failure detection and convergence.
+- **MP-BGP (VPNv4)** is used across the MPLS provider backbones to exchange site VPNv4 routes between the WE and Vodafone PE routers, keeping HQ, DC, and Branch reachable across either carrier.
+- **Static routing** is used at select edge points for default/backup paths.
 
----
+## 🌐 SD-WAN & WAN Resilience
 
-## Static Routes
+Each site's FortiGate is dual-homed to **WE** and **Vodafone** MPLS circuits. SD-WAN rules provide:
 
-![Routes](Images/HQ/Static_Routes.png)
+- Automatic failover between carriers based on link health (jitter/latency/packet loss SLAs)
+- Load balancing across both ISPs
+- Continuous VPN/tunnel health monitoring
 
----
+## 🔐 Security Architecture
 
-## Traffic Logs
+- **FortiGate NGFW** at HQ, DC, and Branch — firewall policies, NAT, and security-zone enforcement
+- **Site-to-site IPsec IKEv2 VPN** between HQ, DC, and Branch as a resilient overlay to the MPLS transport
+- **VLAN-based segmentation** isolating HR, IT, and Sales departments from each other and from the DMZ
+- **DMZ** for any externally reachable services, isolated from internal VLANs
+- **FortiAnalyzer** for centralized log correlation and traffic visibility
+- **FortiClient EMS** for endpoint compliance and posture enforcement
 
-![Logs](Images/HQ/Traffic_Logs.png)
+## 📋 Compliance & Standards
 
----
+The design maps to control objectives from:
 
-# 🏢 Data Center
+- **PCI-DSS v4.0** — network segmentation, restricted administrative access, logging and monitoring of cardholder-adjacent zones
+- **ISO 27001:2022** — access control, network security management, and operational security controls
 
-The Data Center hosts critical enterprise services and is securely connected to HQ through dedicated routing and firewall policies.
-
----
-
-# 🏢 Disaster Recovery
-
-A Disaster Recovery Site provides business continuity through redundant connectivity and secure routing.
-
----
-
-# 🏢 Branch Office
-
-The Branch connects to HQ using:
-
-- Dual ISP
-- SD-WAN
-- IPsec VPN
-- OSPF Routing
+> ⚠️ This is an academic simulation intended to demonstrate these controls conceptually; it has not been through a formal PCI-DSS/ISO 27001 audit.
 
 ---
 
-# 🔒 Security Features
+## 🤖 Network Automation
 
-- FortiGate Next Generation Firewall
-- Firewall Policies
-- NAT
-- DMZ
-- VLAN Segmentation
-- Access Control
-- IPsec VPN
-- SD-WAN
-- Traffic Logging
+Python-based automation (Paramiko/SSH) connects to Cisco routers and FortiGate firewalls to:
 
----
+- Pull and back up running configurations on a schedule (cron)
+- Compress and archive backup files
+- Send email notifications on completion/failure
 
-# 🚀 Routing Features
-
-- OSPF Dynamic Routing
-- BGP
-- MPLS Connectivity
-- Static Routes
-- Inter-VLAN Routing
+| Backup Process | Email Notification |
+|---|---|
+| ![Automation](Automation/Images/Backup_Process.png) | ![Email](Automation/Images/Email_Notification.png) |
 
 ---
 
-# 🌐 SD-WAN
+## 🧪 Validation & Testing
 
-Implemented using:
+The network was validated end-to-end after deployment:
 
-- WE ISP
-- Vodafone ISP
+- ✅ All clients received addressing via DHCP successfully
+- ✅ Verified connectivity between HQ and Branch across HR, IT, and Sales VLANs
+- ✅ Verified inter-VLAN connectivity within a site (HR ↔ IT ↔ Sales)
+- ✅ Average measured latency across the WAN: **8–13 ms**
 
-Features:
+<details>
+<summary><b>HQ configuration screenshots</b></summary>
 
-- Automatic Failover
-- Load Balancing
-- VPN Health Monitoring
+| Interfaces | OSPF | SD-WAN Status |
+|---|---|---|
+| ![Interfaces](Images/HQ/Interfaces.png) | ![OSPF](Images/HQ/OSPF_Configuration.png) | ![SD-WAN](Images/HQ/SDWAN_Status.png) |
 
----
+| IPsec Tunnels | Firewall Policies | Static Routes |
+|---|---|---|
+| ![VPN](Images/HQ/IPsec_Tunnels.png) | ![Policies](Images/HQ/Firewall_Policies.png) | ![Routes](Images/HQ/Static_Routes.png) |
 
-# 🔐 IPsec VPN
+![Traffic Logs](Images/HQ/Traffic_Logs.png)
 
-Site-to-Site VPN tunnels secure communication between:
+</details>
 
-- HQ
-- Data Center
-- Branch
+<details>
+<summary><b>Connectivity test results</b></summary>
 
----
+| Test | Result |
+|---|---|
+| HR ↔ HR (HQ ↔ Branch) | ![HR](Images/Testing/HR_to_HR_Test.png) |
+| IT ↔ IT (HQ ↔ Branch) | ![IT](Images/Testing/IT_to_IT_Test.png) |
+| Sales ↔ Sales (HQ ↔ Branch) | ![Sales](Images/Testing/Sales_to_Sales_Test.png) |
+| HR → IT | ![HRIT](Images/Testing/HR_to_IT_Test.png) |
+| IT → Sales | ![ITSales](Images/Testing/IT_to_Sales_Test.png) |
+| Sales → HR | ![SalesHR](Images/Testing/Sales_to_HR_Test.png) |
 
-# 🤖 Network Automation
-
-Python automation was developed to:
-
-- Connect to Cisco Routers
-- Connect to FortiGate Firewalls
-- Backup Configurations
-- Compress Files
-- Send Email Notifications
-
----
-
-## Backup Process
-
-![Automation](Automation/Images/Backup_Process.png)
+</details>
 
 ---
 
-## Email Notification
-
-![Email](Automation/Images/Email_Notification.png)
-
----
-
-# 🧪 Network Validation
-
-The network was successfully validated.
-
-## DHCP
-
-All clients received IP addresses successfully.
-
-## Connectivity
-
-Successful communication verified between:
-
-- HQ HR ↔ Branch HR
-- HQ IT ↔ Branch IT
-- HQ Sales ↔ Branch Sales
-- HR ↔ IT
-- Sales ↔ HR
-- IT ↔ Sales
-
-Average latency:
-
-8–13 ms
-
----
-
-## Test Results
-
-### HR Test
-
-![HR](Images/Testing/HR_to_HR_Test.png)
-
----
-
-### IT Test
-
-![IT](Images/Testing/IT_to_IT_Test.png)
-
----
-
-### Sales Test
-
-![Sales](Images/Testing/Sales_to_Sales_Test.png)
-
----
-
-### HR → IT
-
-![HRIT](Images/Testing/HR_to_IT_Test.png)
-
----
-
-### IT → Sales
-
-![ITSales](Images/Testing/IT_to_Sales_Test.png)
-
----
-
-### Sales → HR
-
-![SalesHR](Images/Testing/Sales_to_HR_Test.png)
-
----
-
-# 📂 Repository Structure
+## 📂 Repository Structure
 
 ```
 Secure-Banking-Network
 │
-├── Images
-├── Cisco
-├── FortiGate
-├── Automation
-├── Documentation
-├── PNETLab
+├── Cisco/                # Router & switch configs (MPLS PE/P/RR, Core, Access, DMZ)
+├── FortiGate/             # FortiGate NGFW configs — HQ, DC, Branch (sanitized, see note below)
+├── Automation/            # Python backup/notification scripts + screenshots
+├── Documentation/         # Graduation project report (.docx)
+├── PNETLab/               # PNETLab lab topology file (.unl)
+├── Images/                # Topology diagram + validation screenshots
 └── README.md
 ```
 
 ---
 
-# 📚 Documentation
+## 📚 Documentation
 
-- Project Report
-- Presentation
-- Cisco Configurations
-- FortiGate Configurations
-- Automation Scripts
+- 📄 [Graduation Project Book](Documentation/Graduation_Project_Book.docx) — full written report (design, implementation, testing, conclusion)
+- 🖧 [PNETLab Topology File](PNETLab/Graduation%20project.unl) — importable lab file
+- ⚙ Full Cisco and FortiGate configuration exports (see `Cisco/` and `FortiGate/`)
 
 ---
 
-# 🎯 Results
+## 🔒 A Note on Configuration Files
 
-✅ Enterprise Banking Network Successfully Designed
-
-✅ Cisco Enterprise Infrastructure
-
-✅ FortiGate NGFW Deployment
-
-✅ OSPF Routing
-
-✅ BGP Connectivity
-
-✅ MPLS Backbone
-
-✅ SD-WAN
-
-✅ IPsec VPN
-
-✅ VLAN Segmentation
-
-✅ Inter-VLAN Routing
-
-✅ Firewall Policies
-
-✅ Network Automation
-
-✅ Automatic Backup
-
-✅ Email Notification
-
-✅ High Availability
-
-✅ Disaster Recovery
+The FortiGate configuration exports in this repository have had all administrative passwords, PSK/IPsec secrets, and private keys **redacted** prior to publishing. If you're reviewing these configs for learning purposes, treat the redacted values as placeholders — they are not usable credentials.
 
 ---
 
-# 👨‍💻 Author
+## 🎯 Results
 
-## Islam Ashraf
-
-Junior Network Engineer
-
-CCNA Certified
-
-CCNP Enterprise (In Progress)
-
-GitHub
-
-https://github.com/islamhaamzaa
-
-LinkedIn
-
-https://www.linkedin.com/in/islam-ashraf-hamza
+✅ Multi-site enterprise banking network designed and deployed in simulation
+✅ Dual-carrier MPLS transport (WE & Vodafone) with MP-BGP VPNv4
+✅ OSPF + BFD for fast intra-site convergence
+✅ FortiGate NGFW deployment across HQ, DC, and Branch
+✅ SD-WAN with automatic ISP failover
+✅ Site-to-site IPsec IKEv2 VPN
+✅ VLAN micro-segmentation & DMZ isolation
+✅ Centralized visibility via FortiAnalyzer, endpoint compliance via FortiClient EMS
+✅ PCI-DSS v4.0 / ISO 27001:2022–aligned design
+✅ Python-based configuration backup automation with email alerting
+✅ End-to-end connectivity and latency validation
 
 ---
 
-⭐ If you like this project, don't forget to Star the repository.
+## 👥 Team
+
+This project was designed and built by a 7-member graduation team:
+
+- **Islam Ashraf Hamza**
+- Mariam Wefky
+- Eslam Ashraf
+- Abd Elhakem Ezat
+- Mahmoud Hesham
+- Mohamed Salah
+- Basem Adel
+- Hisham Hany
+
+Supervised by **Dr. Atef Salama** — Giza High Institute for Engineering and Technology.
+
+---
+
+## 👨‍💻 Author / Contact
+
+**Islam Ashraf Hamza**
+Junior Network Engineer · CCNA Certified · CCNP Enterprise (In Progress)
+
+[![GitHub](https://img.shields.io/badge/GitHub-islamhaamzaa-181717?logo=github&logoColor=white)](https://github.com/islamhaamzaa)
+[![LinkedIn](https://img.shields.io/badge/LinkedIn-Islam_Ashraf_Hamza-0A66C2?logo=linkedin&logoColor=white)](https://www.linkedin.com/in/islam-ashraf-hamza)
+
+---
+
+⭐ If you found this project useful, consider starring the repository.
+
