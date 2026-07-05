@@ -527,12 +527,11 @@ Future enhancements may include:
 This project was developed by:
 
 - Islam Ashraf Hamza
-- Mariam Wefky
-- Eslam Ashraf
-- Abd Elhakem Ezat
 - Mahmoud Hesham
+- Mariam Wefky
+- Abd Elhakem Ezzat
 - Mohamed Salah
-- Basem Adel
+- Bassem Adel
 - Hisham Hany
 
 Supervisor:
